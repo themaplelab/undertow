@@ -35,6 +35,7 @@
     <name>Undertow Core</name>
 
     <properties>
+        <java.version>19</java.version>
         <test.level>INFO</test.level>
         <ajp>false</ajp>
         <proxy>false</proxy>

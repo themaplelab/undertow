@@ -40,6 +40,7 @@
         <dump>false</dump>
         <test.ipv6>false</test.ipv6>
         <bufferSize>8192</bufferSize>
+        <java.version>19</java.version>
     </properties>
 
     <dependencies>

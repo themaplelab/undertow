@@ -34,7 +34,9 @@
 
     <name>Undertow Parser Generator</name>
     <description>An annotation processor that is used to generate the HTTP parser</description>
-
+    <properties>
+        <java.version>19</java.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.jboss.classfilewriter</groupId>
