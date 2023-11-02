@@ -35,6 +35,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <java.version>19</java.version>
         <version.karaf.plugin>4.4.1</version.karaf.plugin>
     </properties>
 
