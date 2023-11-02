@@ -32,7 +32,9 @@
     <artifactId>undertow-examples</artifactId>
     <name>Undertow Examples</name>
     <version>2.3.11.Final-SNAPSHOT</version>
-
+    <properties>
+        <java.version>19</java.version>
+    </properties>
     <dependencies>
 
         <dependency>

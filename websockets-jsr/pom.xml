@@ -38,6 +38,7 @@
         <serverPort>7777</serverPort>
         <proxy>false</proxy>
         <test.ipv6>false</test.ipv6>
+        <java.version>19</java.version>
     </properties>
 
     <dependencies>
