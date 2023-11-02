@@ -231,6 +231,6 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             if (conn != null) {
                 conn.close();
             }
-        }}
-    
+        }
+    }
 }

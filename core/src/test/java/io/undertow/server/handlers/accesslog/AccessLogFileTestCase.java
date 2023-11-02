@@ -169,13 +169,10 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             for (int j = 0; j < NUM_REQUESTS; ++j) {
                 Assert.assertTrue(completeLog.contains("REQ thread-" + i + "-request-" + j));
             }
-        }}
+        }
+    }
 
-    
-
-
-    
-@Test
+    @Test
     public void testForcedLogRotation() throws IOException, InterruptedException {
         Path logFileName = logDirectory.resolve("server.log");
 

@@ -101,11 +101,9 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
         deploymentManager = container.addDeployment(builder);
         deploymentManager.deploy();
 
-        DefaultServer.setRootHandler(Handlers.path().addPrefixPath("/ws", deploymentManager.start()));}
-    
-
-    
-@AfterClass
+        DefaultServer.setRootHandler(Handlers.path().addPrefixPath("/ws", deploymentManager.start()));
+    }
+    @AfterClass
     public static void after() throws ServletException {
         StressEndpoint.MESSAGES.clear();
         if (deploymentManager != null) {

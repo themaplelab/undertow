@@ -300,11 +300,9 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             Assert.assertTrue(executorService.awaitTermination(70, TimeUnit.SECONDS));
         } finally {
             client.close();
-        }}
-    
-
-    
-private static final class RateLimitedInputStream extends InputStream {
+        }
+    }
+    private static final class RateLimitedInputStream extends InputStream {
         private final InputStream in;
         private int count;
 
