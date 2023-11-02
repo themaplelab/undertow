@@ -153,7 +153,7 @@ public class StuckThreadDetectionHandler implements HttpHandler {
         // Keeping a reference to the thread object here does not prevent
         // GC'ing, as the reference is removed from the Map in the finally clause
 
-        Long key = Thread.currentThread().getId();
+        Long key = Thread.currentThread().threadId();
         MonitoredThread monitoredThread = new MonitoredThread(Thread.currentThread(), exchange.getRequestURI() + exchange.getQueryString());
         activeThreads.put(key, monitoredThread);
         if(timerKey == null) {
@@ -247,7 +247,7 @@ public class StuckThreadDetectionHandler implements HttpHandler {
 
         CompletedStuckThread(Thread thread, long totalActiveTime) {
             this.threadName = thread.getName();
-            this.threadId = thread.getId();
+            this.threadId = thread.threadId();
             this.totalActiveTime = totalActiveTime;
         }
 

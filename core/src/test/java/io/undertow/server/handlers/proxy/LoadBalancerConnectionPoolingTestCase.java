@@ -27,6 +27,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadFactory;
 
 @RunWith(DefaultServer.class)
 @ProxyIgnore
@@ -89,7 +90,9 @@ public class LoadBalancerConnectionPoolingTestCase {
 
     @Test
     public void shouldReduceConnectionPool() throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
+        ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory);
         PoolingClientConnectionManager conman = new PoolingClientConnectionManager();
         conman.setDefaultMaxPerRoute(20);
         final TestHttpClient client = new TestHttpClient(conman);
@@ -133,6 +136,6 @@ public class LoadBalancerConnectionPoolingTestCase {
         while (!activeConnections.isEmpty() && System.currentTimeMillis() < end) {
             Thread.sleep(100);
         }
-        Assert.assertEquals(0, activeConnections.size());
-    }
+        Assert.assertEquals(0, activeConnections.size());}
+    
 }

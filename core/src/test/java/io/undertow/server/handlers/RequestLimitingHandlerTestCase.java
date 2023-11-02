@@ -43,6 +43,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author Stuart Douglas
@@ -78,9 +79,11 @@ public class RequestLimitingHandlerTestCase {
 
     @Test
     public void testRateLimitingHandler() throws ExecutionException, InterruptedException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         latch.countDown();
         latch = new CountDownLatch(1);
-        ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
             final List<Future<?>> futures = new ArrayList<>();
             for (int i = 0; i < N_THREADS; ++i) {
@@ -109,16 +112,19 @@ public class RequestLimitingHandlerTestCase {
             }
         } finally {
             executor.shutdown();
-        }
+        }}
 
-    }
+    
 
 
-    @Test
+    
+@Test
     public void testRateLimitingHandlerQueueFull() throws ExecutionException, InterruptedException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         latch.countDown();
         latch = new CountDownLatch(1);
-        ExecutorService executor = Executors.newFixedThreadPool(N_THREADS * 2);
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
             final List<Future<?>> futures = new ArrayList<>();
             for (int i = 0; i < N_THREADS * 2; ++i) {
@@ -175,8 +181,7 @@ public class RequestLimitingHandlerTestCase {
 
         } finally {
             executor.shutdown();
-        }
+        }}
 
-    }
-
+    
 }
