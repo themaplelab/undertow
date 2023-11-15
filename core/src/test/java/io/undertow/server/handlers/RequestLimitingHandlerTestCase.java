@@ -79,7 +79,7 @@ public class RequestLimitingHandlerTestCase {
 
     @Test
     public void testRateLimitingHandler() throws ExecutionException, InterruptedException {
-ThreadFactory threadFactory = Thread.ofVirtual().factory();
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
 
         latch.countDown();
         latch = new CountDownLatch(1);
@@ -112,15 +112,11 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             }
         } finally {
             executor.shutdown();
-        }}
-
-    
-
-
-    
-@Test
+        }
+    }
+    @Test
     public void testRateLimitingHandlerQueueFull() throws ExecutionException, InterruptedException {
-ThreadFactory threadFactory = Thread.ofVirtual().factory();
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
 
         latch.countDown();
         latch = new CountDownLatch(1);
@@ -181,7 +177,6 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
 
         } finally {
             executor.shutdown();
-        }}
-
-    
+        }
+    }
 }

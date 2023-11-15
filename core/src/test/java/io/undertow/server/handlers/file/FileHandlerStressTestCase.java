@@ -101,7 +101,7 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
 
         } finally {
             executor.shutdown();
-        }}
-    
+        }
+    }
 }
 

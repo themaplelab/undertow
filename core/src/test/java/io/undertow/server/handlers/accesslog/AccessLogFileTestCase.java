@@ -119,7 +119,7 @@ public class AccessLogFileTestCase {
 
     @Test
     public void testLogLotsOfThreads() throws IOException, InterruptedException, ExecutionException {
-ThreadFactory threadFactory = Thread.ofVirtual().factory();
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
 
         Path directory = logDirectory;
         Path logFileName = directory.resolve("server2.log");
@@ -169,13 +169,9 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             for (int j = 0; j < NUM_REQUESTS; ++j) {
                 Assert.assertTrue(completeLog.contains("REQ thread-" + i + "-request-" + j));
             }
-        }}
-
-    
-
-
-    
-@Test
+        }
+    }
+    @Test
     public void testForcedLogRotation() throws IOException, InterruptedException {
         Path logFileName = logDirectory.resolve("server.log");
 

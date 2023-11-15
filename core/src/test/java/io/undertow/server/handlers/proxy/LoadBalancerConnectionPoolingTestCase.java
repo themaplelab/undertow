@@ -136,6 +136,6 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
         while (!activeConnections.isEmpty() && System.currentTimeMillis() < end) {
             Thread.sleep(100);
         }
-        Assert.assertEquals(0, activeConnections.size());}
-    
+        Assert.assertEquals(0, activeConnections.size());
+    }
 }

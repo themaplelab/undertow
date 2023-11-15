@@ -156,8 +156,7 @@ public class SimpleSSLTestCase {
     }
 
     private void runTest(int concurrency, HttpHandler handler) throws IOException, InterruptedException {
-ThreadFactory threadFactory = Thread.ofVirtual().factory();
-
+        ThreadFactory threadFactory = Thread.ofVirtual().factory();
         DefaultServer.setRootHandler(handler);
         DefaultServer.startSSLServer();
         ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory);
@@ -207,6 +206,6 @@ ThreadFactory threadFactory = Thread.ofVirtual().factory();
             if (!executorService.isTerminated()) {
                 executorService.shutdownNow();
             }
-        }}
-    
+        }
+    }
 }
