@@ -45,6 +45,7 @@ import io.undertow.testutils.TestHttpClient;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author Stuart Douglas
@@ -59,7 +60,9 @@ public class FileHandlerStressTestCase {
 
     @Test
     public void simpleFileStressTest() throws IOException, ExecutionException, InterruptedException, URISyntaxException {
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
             Path rootPath = Paths.get(getClass().getResource("page.html").toURI()).getParent();
             final ResourceHandler handler = new ResourceHandler(new PathResourceManager(rootPath, 10485760));
@@ -98,7 +101,7 @@ public class FileHandlerStressTestCase {
 
         } finally {
             executor.shutdown();
-        }
-    }
+        }}
+    
 }
 

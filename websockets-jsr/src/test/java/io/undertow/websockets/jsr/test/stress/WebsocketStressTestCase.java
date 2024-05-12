@@ -56,6 +56,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author <a href="mailto:nmaurer@redhat.com">Norman Maurer</a>
@@ -74,8 +75,10 @@ public class WebsocketStressTestCase {
 
     @BeforeClass
     public static void setup() throws Exception {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         defaultContainer = ContainerProvider.getWebSocketContainer();
-        executor = Executors.newFixedThreadPool(NUM_THREADS);
+        executor = Executors.newThreadPerTaskExecutor(threadFactory);
 
         final ServletContainer container = ServletContainer.Factory.newInstance();
 
@@ -98,10 +101,11 @@ public class WebsocketStressTestCase {
         deploymentManager = container.addDeployment(builder);
         deploymentManager.deploy();
 
-        DefaultServer.setRootHandler(Handlers.path().addPrefixPath("/ws", deploymentManager.start()));
-    }
+        DefaultServer.setRootHandler(Handlers.path().addPrefixPath("/ws", deploymentManager.start()));}
+    
 
-    @AfterClass
+    
+@AfterClass
     public static void after() throws ServletException {
         StressEndpoint.MESSAGES.clear();
         if (deploymentManager != null) {
