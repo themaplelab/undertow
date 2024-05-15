@@ -61,6 +61,7 @@ import io.undertow.util.Methods;
 import io.undertow.util.Protocols;
 import io.undertow.util.StatusCodes;
 import io.undertow.util.StringReadChannelListener;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Tests the load balancing proxy
@@ -145,12 +146,14 @@ public class LoadBalancingProxyHTTP2TestCase extends AbstractLoadBalancingProxyT
 
     @Test
     public void testHttp2ClientMultipleStreamsThreadSafety() throws IOException, URISyntaxException, ExecutionException, InterruptedException, TimeoutException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         //not actually a proxy test
         //but convent to put it here
         UndertowXnioSsl ssl = new UndertowXnioSsl(DefaultServer.getWorker().getXnio(), OptionMap.EMPTY, DefaultServer.SSL_BUFFER_POOL, DefaultServer.createClientSslContext());
         final UndertowClient client = UndertowClient.getInstance();
         final ClientConnection connection = client.connect(new URI("https", null, DefaultServer.getHostAddress(), DefaultServer.getHostPort() + 1, "/", null, null), DefaultServer.getWorker(), ssl, DefaultServer.getBufferPool(), OptionMap.create(UndertowOptions.ENABLE_HTTP2, true)).get();
-        final ExecutorService service = Executors.newFixedThreadPool(10);
+        final ExecutorService service = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
             Deque<FutureResult<String>> futures = new ArrayDeque<>();
             for (int i = 0; i < 100; ++i) {
@@ -206,6 +209,6 @@ public class LoadBalancingProxyHTTP2TestCase extends AbstractLoadBalancingProxyT
             }
         } finally {
             service.shutdownNow();
-        }
-    }
+        }}
+    
 }

@@ -45,6 +45,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Tests writing the database (in memory)
@@ -169,13 +170,15 @@ public class JDBCLogDatabaseTestCase {
 
     @Test
     public void testLogLotsOfThreadsToDatabase() throws IOException, InterruptedException, ExecutionException, SQLException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
 
         JDBCLogHandler logHandler = new JDBCLogHandler(HELLO_HANDLER, DefaultServer.getWorker(), "combined", ds);
 
         CompletionLatchHandler latchHandler;
         DefaultServer.setRootHandler(latchHandler = new CompletionLatchHandler(NUM_REQUESTS * NUM_THREADS, logHandler));
 
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
             final List<Future<?>> futures = new ArrayList<>();
             for (int i = 0; i < NUM_THREADS; ++i) {
@@ -228,7 +231,6 @@ public class JDBCLogDatabaseTestCase {
             if (conn != null) {
                 conn.close();
             }
-        }
-    }
-
+        }}
+    
 }
