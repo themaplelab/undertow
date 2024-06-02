@@ -45,6 +45,7 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author Stuart Douglas
@@ -155,9 +156,11 @@ public class SimpleSSLTestCase {
     }
 
     private void runTest(int concurrency, HttpHandler handler) throws IOException, InterruptedException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         DefaultServer.setRootHandler(handler);
         DefaultServer.startSSLServer();
-        ExecutorService executorService = Executors.newFixedThreadPool(concurrency);
+        ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory);
         try (CloseableHttpClient client = HttpClients.custom().disableConnectionState()
                 .setSSLContext(DefaultServer.getClientSSLContext())
                 .setDefaultSocketConfig(SocketConfig.custom().setSoTimeout(60000).build())
@@ -204,7 +207,6 @@ public class SimpleSSLTestCase {
             if (!executorService.isTerminated()) {
                 executorService.shutdownNow();
             }
-        }
-    }
-
+        }}
+    
 }

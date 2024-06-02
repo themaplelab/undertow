@@ -103,7 +103,7 @@ public class GracefulShutdownTestCase {
             latch2.set(latch);
 
             latch1.set(new CountDownLatch(1));
-            Thread t = new Thread(new RequestTask());
+            Thread t  = Thread.ofVirtual().unstarted(new RequestTask());
             t.start();
             latch1.get().await();
             shutdown.shutdown();
@@ -150,7 +150,7 @@ public class GracefulShutdownTestCase {
 
 
             latch1.set(new CountDownLatch(1));
-            Thread t = new Thread(new RequestTask());
+            Thread t  = Thread.ofVirtual().unstarted(new RequestTask());
             t.start();
             latch1.get().await();
 

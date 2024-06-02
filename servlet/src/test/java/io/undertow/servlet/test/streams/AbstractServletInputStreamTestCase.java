@@ -49,6 +49,7 @@ import io.undertow.testutils.DefaultServer;
 import io.undertow.testutils.HttpClientUtils;
 import io.undertow.testutils.TestHttpClient;
 import io.undertow.util.StatusCodes;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author Stuart Douglas
@@ -251,6 +252,8 @@ public abstract class AbstractServletInputStreamTestCase {
     }
 
     public void runTestParallel(int concurrency, final String message, String url, boolean preamble, boolean offIOThread) throws Exception {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
 
         CloseableHttpClient client = HttpClients.custom()
                 .setMaxConnPerRoute(1000)
@@ -258,7 +261,7 @@ public abstract class AbstractServletInputStreamTestCase {
                 .build();
         byte[] messageBytes = message.getBytes();
         try {
-            ExecutorService executorService = Executors.newFixedThreadPool(concurrency);
+            ExecutorService executorService = Executors.newThreadPerTaskExecutor(threadFactory);
             Callable task = new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
@@ -297,10 +300,11 @@ public abstract class AbstractServletInputStreamTestCase {
             Assert.assertTrue(executorService.awaitTermination(70, TimeUnit.SECONDS));
         } finally {
             client.close();
-        }
-    }
+        }}
+    
 
-    private static final class RateLimitedInputStream extends InputStream {
+    
+private static final class RateLimitedInputStream extends InputStream {
         private final InputStream in;
         private int count;
 

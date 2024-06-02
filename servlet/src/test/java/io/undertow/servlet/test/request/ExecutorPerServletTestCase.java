@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @author Stuart Douglas
@@ -81,7 +82,9 @@ public class ExecutorPerServletTestCase {
     }
 
     public int runTest(final String path) throws IOException, ExecutionException, InterruptedException {
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
 
             final List<Future<?>> futures = new ArrayList<>();
@@ -119,6 +122,6 @@ public class ExecutorPerServletTestCase {
             }
         } finally {
             executor.shutdown();
-        }
-    }
+        }}
+    
 }
