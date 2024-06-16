@@ -47,6 +47,7 @@ import io.undertow.testutils.HttpClientUtils;
 import io.undertow.testutils.TestHttpClient;
 import io.undertow.util.CompletionLatchHandler;
 import io.undertow.util.FileUtils;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * Tests writing the access log to a file
@@ -118,6 +119,8 @@ public class AccessLogFileTestCase {
 
     @Test
     public void testLogLotsOfThreads() throws IOException, InterruptedException, ExecutionException {
+ThreadFactory threadFactory = Thread.ofVirtual().factory();
+
         Path directory = logDirectory;
         Path logFileName = directory.resolve("server2.log");
 
@@ -125,7 +128,7 @@ public class AccessLogFileTestCase {
         CompletionLatchHandler latchHandler;
         DefaultServer.setRootHandler(latchHandler = new CompletionLatchHandler(NUM_REQUESTS * NUM_THREADS, new AccessLogHandler(HELLO_HANDLER, logReceiver, "REQ %{i,test-header}", AccessLogFileTestCase.class.getClassLoader())));
 
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+        ExecutorService executor = Executors.newThreadPerTaskExecutor(threadFactory);
         try {
 
             final List<Future<?>> futures = new ArrayList<>();
@@ -166,12 +169,13 @@ public class AccessLogFileTestCase {
             for (int j = 0; j < NUM_REQUESTS; ++j) {
                 Assert.assertTrue(completeLog.contains("REQ thread-" + i + "-request-" + j));
             }
-        }
+        }}
 
-    }
+    
 
 
-    @Test
+    
+@Test
     public void testForcedLogRotation() throws IOException, InterruptedException {
         Path logFileName = logDirectory.resolve("server.log");
 

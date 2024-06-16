@@ -217,7 +217,7 @@ public class InMemorySessionTestCase {
                                 }
                             }
                         };
-                        Thread thread = new Thread(r);
+                        Thread thread  = Thread.ofVirtual().unstarted(r);
                         thread.start();
                     }
                     //  here the server is accessing one session attribute, so we're sure that the bumped timeout
